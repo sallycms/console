@@ -13,15 +13,18 @@ namespace sly\Console;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use sly_App_Interface;
+use sly_Container;
+use sly_Core;
 
-class App implements \sly_App_Interface {
+class App implements sly_App_Interface {
 	protected $container;
 	protected $root;
 	protected $input;
 	protected $output;
 	protected $console;
 
-	public function __construct(\sly_Container $container, $rootDir) {
+	public function __construct(sly_Container $container, $rootDir) {
 		$this->container = $container;
 		$this->root      = realpath($rootDir);
 	}
@@ -43,10 +46,10 @@ class App implements \sly_App_Interface {
 		$container->setI18N(new \sly_I18N('en_gb', $this->root.'/lang'));
 
 		// boot addOns
-		\sly_Core::loadAddOns();
+		sly_Core::loadAddOns();
 
 		// register listeners
-		\sly_Core::registerListeners();
+		sly_Core::registerListeners();
 
 		// init console and error handling as early as possible
 		$this->initConsole();
