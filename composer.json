@@ -1,0 +1,67 @@
+{
+    "name": "sallycms/console",
+    "description": "command line tool to manage SallyCMS projects",
+    "keywords": [
+        "cms",
+        "administration",
+        "sallycms",
+        "command",
+        "commandline",
+        "console"
+    ],
+    "authors": [
+        {
+            "name": "webvariants GbR",
+            "homepage": "http://www.webvariants.de/"
+        }
+    ],
+    "version": "0.8.x-dev",
+    "homepage": "http://www.sallycms.de/",
+    "license": "MIT",
+    "type": "sallycms-app",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "fabpot/yaml",
+                "version": "1.0.6",
+                "autoload": {
+                    "psr-0": {
+                        "sfYaml": "lib/"
+                    }
+                },
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/fabpot/yaml/zipball/8a266aadce"
+                }
+            }
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "sly\\Console": "lib/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "sallycms/core": "0.8.*@dev",
+        "sallycms/composer-installer": "~1.1",
+        "symfony/console": "2.2.*@RC"
+    },
+    "bin": [
+        "bin/console"
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-default": "0.9.x-dev"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "xrstf\\Composer52\\Generator::onPostInstallCmd"
+        ],
+        "post-update-cmd": [
+            "xrstf\\Composer52\\Generator::onPostInstallCmd"
+        ]
+    }
+}
