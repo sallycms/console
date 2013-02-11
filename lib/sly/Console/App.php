@@ -60,7 +60,7 @@ class App implements sly_App_Interface {
 		$config = $this->container->getConfig();
 
 		foreach ($config->get('console/commands') as $name => $className) {
-			$command = new $className($this);
+			$command = new $className($name, $this);
 			$this->console->add($command);
 		}
 
