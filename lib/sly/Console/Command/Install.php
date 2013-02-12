@@ -33,7 +33,6 @@ class Install extends Base {
 				new InputOption('db-prefix', null, InputOption::VALUE_REQUIRED, 'The database table prefix', 'sly_'),
 				new InputOption('no-db-init', null, InputOption::VALUE_NONE, 'To perform no changes to the database.'),
 				new InputOption('create-db', null, InputOption::VALUE_NONE, 'To create the database if it does not yet exist.'),
-				new InputOption('create-db', null, InputOption::VALUE_NONE, 'To create the database if it does not yet exist.'),
 				new InputOption('no-user', null, InputOption::VALUE_NONE, 'To not create/update the admin account.'),
 			));
 	}
