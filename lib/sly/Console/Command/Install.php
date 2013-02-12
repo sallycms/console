@@ -25,12 +25,17 @@ class Install extends Command {
 				new InputArgument('db-name', InputArgument::REQUIRED, 'The name of the database to use'),
 				new InputArgument('db-user', InputArgument::REQUIRED, 'The database username'),
 				new InputArgument('db-pass', InputArgument::REQUIRED, 'The database password'),
+				new InputArgument('password', InputArgument::OPTIONAL, 'The password for the new admin account'),
+				new InputArgument('username', InputArgument::OPTIONAL, 'The username for the new admin account'),
+				new InputOption('timezone', null, InputOption::VALUE_REQUIRED, 'The project timezone', 'UTC'),
+				new InputOption('name', null, InputOption::VALUE_REQUIRED, 'The project name', 'SallyCMS-Projekt'),
 				new InputOption('db-host', null, InputOption::VALUE_REQUIRED, 'The database host', 'localhost'),
 				new InputOption('db-driver', null, InputOption::VALUE_REQUIRED, 'The database driver to use', 'mysql'),
 				new InputOption('db-prefix', null, InputOption::VALUE_REQUIRED, 'The database table prefix', 'sly_'),
-				new InputOption('db-create', null, InputOption::VALUE_NONE, 'To create the database if it does not yet exist.'),
-				new InputOption('timezone', null, InputOption::VALUE_REQUIRED, 'The project timezone', 'UTC'),
-				new InputOption('name', null, InputOption::VALUE_REQUIRED, 'The project name', 'SallyCMS-Projekt'),
+				new InputOption('no-db-init', null, InputOption::VALUE_NONE, 'To perform no changes to the database.'),
+				new InputOption('create-db', null, InputOption::VALUE_NONE, 'To create the database if it does not yet exist.'),
+				new InputOption('create-db', null, InputOption::VALUE_NONE, 'To create the database if it does not yet exist.'),
+				new InputOption('no-user', null, InputOption::VALUE_NONE, 'To not create/update the admin account.'),
 			));
 	}
 
