@@ -64,6 +64,11 @@ class App implements sly_App_Interface {
 			$this->console->add($command);
 		}
 
+		// allow addOns to add custom options to the available commands
+		$this->container->getDispatcher()->notify('SLY_CONSOLE_COMMANDS', $this->console, array(
+			'container' => $this->container
+		));
+
 		$this->console->run();
 	}
 
