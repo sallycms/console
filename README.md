@@ -82,19 +82,14 @@ To see how a command should be used, use either the `help` command or call the c
 Commands
 --------
 
-Commands are implemented in PHP classes that need to extend `Symfony\Component\Console\Command\Command`. In this regard, Sally commands are identical to Symfony commands, so any documentation on how to configure them also applies here, with the exception that the command is not deducted from the command class name, but rather from the Sally configuration (see below).
+Commands are implemented in PHP classes that need to extend `sly\Console\Command\Base`, which only adds a bit of syntactic sugar for Sally commands, but inherits `Symfony\Component\Console\Command\Command`. In this regard, Sally commands are identical to Symfony commands, so any documentation on how to configure them also applies here, with the exception that the command is not deducted from the command class name, but rather from the Sally configuration (see below).
 
-The major difference here is the command class's constructor, which does not only get the command name passed (as the first argument), but also the Sally Dependency Injection Container.
+The major difference here is the command class's constructor, which does not only get the command name passed (as the first argument), but also the Sally Dependency Injection Container. If your inherit Sally's base command, everything is taken care of and you can simply access the container via `getContainer()`:
 
     :::php
     <?php
     
-    class MyCommand extends Symfony\Component\Console\Command\Command {
-       public function __construct($name, sly_Container $container) {
-          parent::__construct($name);
-          $this->container = $container;
-       }
-       
+    class MyCommand extends sly\Console\Command\Base {
        protected function configure() {
           $this
              ->setName('prefix:command')
@@ -105,7 +100,7 @@ The major difference here is the command class's constructor, which does not onl
        }
 
        protected function execute(InputInterface $input, OutputInterface $output) {
-          $config = $this->container->getConfig();
+          $container = $this->getContainer();
           // ...
        }
     }
