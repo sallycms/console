@@ -10,14 +10,20 @@
  */
 
 // check if we're a standalone installation
-$root = __DIR__.'/../';
+$root = $console = dirname(__DIR__);
 
-if (!file_exists($root.'vendor/autoload.php')) {
-	$root = __DIR__.'/../../../';
-
+if (file_exists($root.'/vendor/autoload.php')) {
+	// make sure the Sally core can find the right vendor directory, since we're
+	// not using sally/vendor/ in standalone installations.
+	define('SLY_VENDORFOLDER', $root.DIRECTORY_SEPARATOR.'vendor');
+}
+else {
 	// check if we're installed as a dependency, residing in sally/vendor/bin/
 	// or (if called directly inside the repository), sally/console/bin/.
-	if (!file_exists($root.'sally/vendor/autoload.php')) {
+	$root    = dirname(dirname(dirname(__DIR__)));
+	$console = $root.'/sally/console';
+
+	if (!file_exists($root.'/sally/vendor/autoload.php')) {
 		print
 			'You must set up the project dependencies, run the following commands:'.PHP_EOL.
 			'php composer.phar install'.PHP_EOL;
@@ -25,14 +31,9 @@ if (!file_exists($root.'vendor/autoload.php')) {
 	}
 }
 
-// make sure the Sally core can find the right vendor directory, since we're
-// not using sally/vendor/ in standalone installations.
-define('SLY_VENDORFOLDER', realpath($root).DIRECTORY_SEPARATOR.'vendor');
-
-// boot Sally core system ($container is required for the boot.php)
-$slyAppName = 'console';
-$slyAppBase = 'console';
-$container  = require $root.'sally/core/master.php';
+// boot Sally core system ($container is required for our boot.php)
+$core      = function($slyAppName, $slyAppBase, $root) { return require $root.'/sally/core/master.php'; };
+$container = $core('console', 'console', $root);
 
 // run the application
-require $root.'boot.php';
+require $console.'/boot.php';
