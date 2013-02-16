@@ -1,4 +1,4 @@
 console:
   commands:
-    sly_install: sly\Console\Command\Install
+    sly_install: sly_Console_Command_Install
     sly_cacheclear: sly\Console\Command\ClearCache
