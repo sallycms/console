@@ -45,8 +45,10 @@ class App implements sly_App_Interface {
 		// ... and locale
 		$container->setI18N(new \sly_I18N('en_gb', $this->root.'/lang'));
 
-		// boot addOns
-		sly_Core::loadAddOns();
+		// boot addOns, but only if the system has already been installed
+		if ($config->get('SETUP', true) === false) {
+			sly_Core::loadAddOns();
+		}
 
 		// register listeners
 		sly_Core::registerListeners();
