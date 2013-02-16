@@ -52,7 +52,7 @@ class App implements sly_App_Interface {
 		sly_Core::registerListeners();
 
 		// init console and error handling as early as possible
-		$this->initConsole();
+		$this->initConsole($container);
 		$this->initErrorHandling($container);
 	}
 
@@ -99,6 +99,11 @@ class App implements sly_App_Interface {
 		elseif (true === $this->input->hasParameterOption(array('--no-ansi'))) {
 			$this->output->setDecorated(false);
 		}
+
+		// put IO into container, so addOns can use it
+		$container['sly-console-input']  = $this->input;
+		$container['sly-console-output'] = $this->output;
+		$container['sly-console-app']    = $this->console;
 	}
 
 	protected function initErrorHandling(sly_Container $container) {

@@ -85,8 +85,6 @@ class ClearCache extends Base {
 
 		$container->getDispatcher()->notify('SLY_CACHE_CLEARED', null, array(
 			'backend'   => false,
-			'input'     => $input,
-			'output'    => $output,
 			'container' => $container
 		));
 	}
