@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use sly_App_Interface;
 use sly_Container;
 use sly_Core;
+use BabelCache_Blackhole;
 
 class App implements sly_App_Interface {
 	protected $container;
@@ -23,6 +24,7 @@ class App implements sly_App_Interface {
 	protected $input;
 	protected $output;
 	protected $console;
+	protected $unusedCache;
 
 	public function __construct(sly_Container $container, $rootDir) {
 		$this->container = $container;
@@ -39,6 +41,9 @@ class App implements sly_App_Interface {
 		// load static config
 		$config->loadStatic($this->root.'/config/static.yml');
 
+		// check whether the cache is available on CLI (APC for example is not)
+		$this->initCache();
+
 		// init timezone
 		date_default_timezone_set($config->get('TIMEZONE', 'UTC'));
 
@@ -54,8 +59,20 @@ class App implements sly_App_Interface {
 		sly_Core::registerListeners();
 
 		// init console and error handling as early as possible
-		$this->initConsole($container);
-		$this->initErrorHandling($container);
+		$this->initConsole();
+		$this->initErrorHandling();
+
+		if ($this->unusedCache) {
+			$this->output->writeln(array(
+				'',
+				'<error>WARNING:</error> The selected caching strategy (<comment>'.$this->unusedCache.'</comment>) '.
+				'is not available on the command line. All commands are therefore using <info>BabelCache_Blackhole</info> '.
+				'as the caching implementation and <error>do not affect the actual website\'s cache data</error>. To '.
+				'avoid this, you can either change the strategy to an always-available implementation (like '.
+				'filesystem-based) or manually clear the cache in the backend after performing tasks in the console.',
+				''
+			));
+		}
 	}
 
 	public function run() {
@@ -90,6 +107,19 @@ class App implements sly_App_Interface {
 		return true;
 	}
 
+	protected function initCache() {
+		$config   = $this->container->getConfig();
+		$strategy = $config->get('CACHING_STRATEGY');
+		$callback = array($strategy, 'isAvailable');
+
+		if ($strategy && !call_user_func($callback)) {
+			$cache = new BabelCache_Blackhole();
+			$this->container['sly-cache'] = $cache;
+
+			$this->unusedCache = $strategy;
+		}
+	}
+
 	protected function initConsole() {
 		$this->input   = new ArgvInput();
 		$this->output  = new ConsoleOutput();
@@ -103,17 +133,17 @@ class App implements sly_App_Interface {
 		}
 
 		// put IO into container, so addOns can use it
-		$container['sly-console-input']  = $this->input;
-		$container['sly-console-output'] = $this->output;
-		$container['sly-console-app']    = $this->console;
+		$this->container['sly-console-input']  = $this->input;
+		$this->container['sly-console-output'] = $this->output;
+		$this->container['sly-console-app']    = $this->console;
 	}
 
-	protected function initErrorHandling(sly_Container $container) {
-		$container->getErrorHandler()->uninit();
+	protected function initErrorHandling() {
+		$this->container->getErrorHandler()->uninit();
 
-		$errorHandler = new ErrorHandler($container, $this->console, $this->output);
+		$errorHandler = new ErrorHandler($this->container, $this->console, $this->output);
 		$errorHandler->init();
 
-		$container->setErrorHandler($errorHandler);
+		$this->container->setErrorHandler($errorHandler);
 	}
 }
