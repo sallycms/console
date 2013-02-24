@@ -31,9 +31,9 @@ else {
 	}
 }
 
-// boot Sally core system ($container is required for our boot.php)
-$core      = function($slyAppName, $slyAppBase, $root) { return require $root.'/sally/core/master.php'; };
-$container = $core('console', 'console', $root);
+// boot Sally core system
+$loader    = require $root.'/sally/core/autoload.php';
+$container = sly_Core::boot($loader, 'dev', 'console', 'console');
 
 // run the application
 require $console.'/boot.php';
