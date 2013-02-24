@@ -42,11 +42,6 @@ class ClearCache extends Base {
 		$container->getCache()->flush('sly', true);
 		$output->writeln(' <info>done</info>.');
 
-		// create bootcache
-		$output->write('Refreshing bootcache...');
-		\sly_Util_BootCache::recreate();
-		$output->writeln(' <info>done</info>.');
-
 		// sync develop files
 		if ($all || $input->getOption('sync-develop')) {
 			$output->write('Refreshing development contents...');
