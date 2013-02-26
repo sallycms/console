@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+/*
+ * Copyright (c) 2013, webvariants GbR, http://www.webvariants.de
+ *
+ * This file is released under the terms of the MIT license. You can find the
+ * complete text in the attached LICENSE file or online at:
+ *
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+// check if we're a standalone installation
+$root = $console = dirname(__DIR__);
+
+if (file_exists($root.'/vendor/autoload.php')) {
+	// make sure the Sally core can find the right vendor directory, since we're
+	// not using sally/vendor/ in standalone installations.
+	define('SLY_VENDORFOLDER', $root.DIRECTORY_SEPARATOR.'vendor');
+}
+else {
+	// check if we're installed as a dependency, residing in sally/vendor/bin/
+	// or (if called directly inside the repository), sally/console/bin/.
+	$root    = dirname(dirname(dirname(__DIR__)));
+	$console = $root.'/sally/console';
+
+	if (!file_exists($root.'/sally/vendor/autoload.php')) {
+		print
+			'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+			'php composer.phar install'.PHP_EOL;
+		exit(1);
+	}
+}
+
+// boot Sally core system
+$loader    = require $root.'/sally/core/autoload.php';
+$container = sly_Core::boot($loader, 'dev', 'console', 'console');
+
+// run the application
+require $console.'/boot.php';
