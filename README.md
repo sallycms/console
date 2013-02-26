@@ -24,7 +24,9 @@ The console is not yet part of the standard distribution for SallyCMS projects, 
 After installing (via `composer install`), you can access the console on your shell via
 
     :::text
-    $ sally/vendor/bin/console ...
+    $ sally/console/bin/console ...
+
+Of course, if you like, you can create a symlink to this file anywhere in your project.
 
 Usage
 -----
@@ -34,7 +36,7 @@ The console is divided into *commands*, which can themselves have arguments and 
 Calling the console with no further arguments lists all available commands and global options (options you can give to any command, even though the command may not take it into account):
 
     :::text
-    $ sally/vendor/bin/console
+    $ sally/console/bin/console
     Sally Console version 0.8.0
 
     Usage:
@@ -58,7 +60,7 @@ Calling the console with no further arguments lists all available commands and g
 To see how a command should be used, use either the `help` command or call the command itself with the `--help` option:
 
     :::text
-    $ sally/vendor/bin/console sly:install --help
+    $ sally/console/bin/console sly:install --help
     Usage:
      sly:install [--timezone="..."] [--name="..."] [--db-host="..."] [--db-driver="..."] [--db-prefix="..."] [--no-db-init] [--create-db] [--no-user] db-name db-user db-pass [password] [username]
 
