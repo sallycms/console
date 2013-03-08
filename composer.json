@@ -44,7 +44,7 @@
     },
     "require": {
         "php": ">=5.3.2",
-        "sallycms/core": "0.8.*@dev",
+        "sallycms/core": "self.version",
         "sallycms/composer-installer": "~1.1",
         "symfony/console": ">=2.1.0,<2.3"
     },
@@ -58,6 +58,9 @@
             "xrstf\\Composer52\\Generator::onPostInstallCmd"
         ],
         "post-update-cmd": [
+            "xrstf\\Composer52\\Generator::onPostInstallCmd"
+        ],
+        "post-autoload-dump": [
             "xrstf\\Composer52\\Generator::onPostInstallCmd"
         ]
     }
