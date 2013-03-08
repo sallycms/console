@@ -123,7 +123,7 @@ class App implements sly_App_Interface {
 	protected function initConsole() {
 		$this->input   = new ArgvInput();
 		$this->output  = new ConsoleOutput();
-		$this->console = new Application('Sally Console', '0.8.0');
+		$this->console = new Application('Sally Console', '0.8');
 
 		if (true === $this->input->hasParameterOption(array('--ansi'))) {
 			$this->output->setDecorated(true);
