@@ -50,6 +50,9 @@ class App implements sly_App_Interface {
 		// ... and locale
 		$container->setI18N(new \sly_I18N('en_gb', $this->root.'/lang'));
 
+		// inject a no-op session, since $_SESSION is not defined in CLI
+		$container['sly-session'] = new NullSession();
+
 		// boot addOns, but only if the system has already been installed
 		if ($config->get('SETUP', true) === false) {
 			sly_Core::loadAddOns();
