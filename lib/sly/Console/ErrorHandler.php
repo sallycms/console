@@ -19,15 +19,16 @@ use RuntimeException;
 use Exception;
 
 class ErrorHandler extends sly_ErrorHandler_Base implements sly_ErrorHandler {
-	protected $runShutdown = true;  ///< bool     if true, the shutdown function will be executed
+	protected $runShutdown;
 	protected $container;
 	protected $console;
 	protected $output;
 
 	public function __construct(sly_Container $container, Application $console, OutputInterface $output) {
-		$this->container = $container;
-		$this->console   = $console;
-		$this->output    = $output;
+		$this->container   = $container;
+		$this->console     = $console;
+		$this->output      = $output;
+		$this->runShutdown = true;
 	}
 
 	/**
