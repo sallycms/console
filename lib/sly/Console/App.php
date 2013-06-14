@@ -32,6 +32,7 @@ class App implements sly_App_Interface {
 	}
 
 	public function initialize() {
+		$is_sly09  = floatval(sly_Core::getVersion('X.Y')) >= 0.9;
 		$container = $this->getContainer();
 		$config    = $container->getConfig();
 
@@ -39,7 +40,7 @@ class App implements sly_App_Interface {
 		$container->setCurrentLanguageId($config->get('DEFAULT_CLANG_ID'));
 
 		// load static config
-		if (floatval(sly_Core::getVersion('X.Y')) >= 0.9)
+		if ($is_sly09)
 			$config->setStatic('/', \sly_Util_YAML::load(SLY_SALLYFOLDER.'/backend/config/static.yml'));
 		else
 			$config->loadStatic($this->root.'/config/static.yml');
@@ -54,7 +55,7 @@ class App implements sly_App_Interface {
 		$container->setI18N(new \sly_I18N('en_gb', $this->root.'/lang'));
 
 		// boot addOns, but only if the system has already been installed
-		if ($config->get('SETUP', true) === false) {
+		if ($config->get($is_sly09 ? 'setup' : 'SETUP', true) === false) {
 			sly_Core::loadAddOns();
 		}
 
