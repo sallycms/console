@@ -39,7 +39,10 @@ class App implements sly_App_Interface {
 		$container->setCurrentLanguageId($config->get('DEFAULT_CLANG_ID'));
 
 		// load static config
-		$config->loadStatic($this->root.'/config/static.yml');
+		if (floatval(sly_Core::getVersion('X.Y')) >= 0.9)
+			$config->setStatic('/', \sly_Util_YAML::load(SLY_SALLYFOLDER.'/backend/config/static.yml'));
+		else
+			$config->loadStatic($this->root.'/config/static.yml');
 
 		// check whether the cache is available on CLI (APC for example is not)
 		$this->initCache();
