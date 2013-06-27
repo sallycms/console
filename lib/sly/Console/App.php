@@ -117,11 +117,12 @@ class App implements sly_App_Interface {
 		$factory  = $this->container['sly-cache-factory'];
 		$strategy = $config->get('caching_strategy', 'memory');
 
-		if ($strategy && !$factory->isAvailable($strategy)) {
-			$this->container['sly-cache'] = new Blackhole();
-
-			$this->unusedCache = $strategy;
-		}
+//		TODO: fixme "Call to undefined method sly_Cache_Factory::isAvailable()"
+//		if ($strategy && !$factory->isAvailable($strategy)) {
+//			$this->container['sly-cache'] = new Blackhole();
+//
+//			$this->unusedCache = $strategy;
+//		}
 	}
 
 	protected function initConsole() {
