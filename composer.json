@@ -1,0 +1,38 @@
+{
+    "name": "sallycms/console",
+    "description": "command line tool to manage SallyCMS projects",
+    "keywords": [
+        "cms",
+        "administration",
+        "sallycms",
+        "command",
+        "commandline",
+        "console"
+    ],
+    "authors": [
+        {
+            "name": "webvariants GbR",
+            "homepage": "http://www.webvariants.de/"
+        }
+    ],
+    "version": "0.8.x-dev",
+    "homepage": "http://www.sallycms.de/",
+    "license": "MIT",
+    "type": "sallycms-app",
+    "autoload": {
+        "psr-0": {
+            "sly\\Console": "lib/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "sallycms/core": "0.8.x-dev",
+        "sallycms/composer-installer": "~1.1",
+        "symfony/console": ">=2.1.0,<2.4"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-default": "0.9.x-dev"
+        }
+    }
+}
