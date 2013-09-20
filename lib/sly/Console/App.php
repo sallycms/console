@@ -98,6 +98,10 @@ class App implements sly_App_Interface {
 
 	}
 
+	public function getCurrentControllerName() {
+
+	}
+
 	public function getCurrentAction() {
 		return 'console';
 	}
