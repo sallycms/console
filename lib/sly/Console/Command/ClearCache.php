@@ -22,7 +22,8 @@ class ClearCache extends Base {
 			->setDescription('Clears the system cache.')
 			->setDefinition(array(
 				new InputOption('all', null, InputOption::VALUE_NONE, 'To perform all optional tasks as well.'),
-				new InputOption('sync-develop', 'd', InputOption::VALUE_NONE, 'To re-sync templates and modules.')
+				new InputOption('sync-develop', 'd', InputOption::VALUE_NONE, 'To re-sync templates and modules.'),
+				new InputOption('no-event', 'e', InputOption::VALUE_NONE, 'Do not trigger "cache cleared" event.')
 			));
 	}
 
@@ -43,9 +44,12 @@ class ClearCache extends Base {
 			$output->writeln(' <info>done</info>.');
 		}
 
-		$container['sly-dispatcher']->notify('SLY_CACHE_CLEARED', null, array(
-			'backend'   => false,
-			'container' => $container
-		));
+		if (!$input->getOption('no-event')) {
+			$output->write('Trigger SLY_CACHE_CLEARED event...');
+			$container['sly-dispatcher']->notify('SLY_CACHE_CLEARED', null, array(
+				'backend'   => false,
+				'container' => $container
+			));
+		}
 	}
 }
