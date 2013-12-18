@@ -10,13 +10,15 @@
 
 namespace sly\Console;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use sly_App_Interface;
 use sly_Container;
 use sly_Core;
-use BabelCache_Blackhole;
+use sly_I18N;
+use sly_Util_YAML;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use wv\BabelCache\Cache\Blackhole;
 
 class App implements sly_App_Interface {
 	protected $container;
@@ -36,25 +38,25 @@ class App implements sly_App_Interface {
 		$config    = $container->getConfig();
 
 		// init the current language
-		$container->setCurrentLanguageId($config->get('DEFAULT_CLANG_ID'));
+		$container->setCurrentLanguageId($config->get('default_clang_id'));
 
 		// load static config
-		$config->loadStatic($this->root.'/config/static.yml');
+		$config->setStatic('/', sly_Util_YAML::load($this->root.'/config/static.yml'));
 
 		// check whether the cache is available on CLI (APC for example is not)
 		$this->initCache();
 
 		// init timezone
-		date_default_timezone_set($config->get('TIMEZONE', 'UTC'));
+		date_default_timezone_set($config->get('timezone', 'UTC'));
 
 		// ... and locale
-		$container->setI18N(new \sly_I18N('en_gb', $this->root.'/lang'));
+		$container->setI18N(new sly_I18N('en_gb', $this->root.'/lang'));
 
 		// inject a no-op session, since $_SESSION is not defined in CLI
 		$container['sly-session'] = new NullSession();
 
 		// boot addOns, but only if the system has already been installed
-		if ($config->get('SETUP', true) === false) {
+		if ($config->get('setup', true) === false) {
 			sly_Core::loadAddOns();
 		}
 
@@ -69,7 +71,7 @@ class App implements sly_App_Interface {
 			$this->output->writeln(array(
 				'',
 				'<error>WARNING:</error> The selected caching strategy (<comment>'.$this->unusedCache.'</comment>) '.
-				'is not available on the command line. All commands are therefore using <info>BabelCache_Blackhole</info> '.
+				'is not available on the command line. All commands are therefore using <info>blackhole</info> '.
 				'as the caching implementation and <error>do not affect the actual website\'s cache data</error>. To '.
 				'avoid this, you can either change the strategy to an always-available implementation (like '.
 				'filesystem-based) or manually clear the cache in the backend after performing tasks in the console.',
@@ -79,7 +81,7 @@ class App implements sly_App_Interface {
 	}
 
 	public function run() {
-		$config = $this->container->getConfig();
+		$config = $this->container['sly-config'];
 
 		foreach ($config->get('console/commands') as $name => $className) {
 			$command = new $className($name, $this);
@@ -87,7 +89,7 @@ class App implements sly_App_Interface {
 		}
 
 		// allow addOns to add custom options to the available commands
-		$this->container->getDispatcher()->notify('SLY_CONSOLE_COMMANDS', $this->console, array(
+		$this->container['sly-dispatcher']->notify('SLY_CONSOLE_COMMANDS', $this->console, array(
 			'container' => $this->container
 		));
 
@@ -115,13 +117,12 @@ class App implements sly_App_Interface {
 	}
 
 	protected function initCache() {
-		$config   = $this->container->getConfig();
-		$strategy = $config->get('CACHING_STRATEGY');
-		$callback = array($strategy, 'isAvailable');
+		$config   = $this->container['sly-config'];
+		$factory  = $this->container['sly-cache-factory'];
+		$strategy = $config->get('caching_strategy', 'memory');
 
-		if ($strategy && !call_user_func($callback)) {
-			$cache = new BabelCache_Blackhole();
-			$this->container['sly-cache'] = $cache;
+		if ($strategy && !$factory->isAvailable($strategy)) {
+			$this->container['sly-cache'] = new Blackhole();
 
 			$this->unusedCache = $strategy;
 		}
@@ -130,7 +131,7 @@ class App implements sly_App_Interface {
 	protected function initConsole() {
 		$this->input   = new ArgvInput();
 		$this->output  = new ConsoleOutput();
-		$this->console = new Application('Sally Console', '0.8');
+		$this->console = new Application('Sally Console', '0.9');
 
 		if (true === $this->input->hasParameterOption(array('--ansi'))) {
 			$this->output->setDecorated(true);
