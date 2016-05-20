@@ -2,3 +2,8 @@ console:
   commands:
     sly_install: sly_Console_Command_Install
     sly_cacheclear: sly\Console\Command\ClearCache
+    sly_addons_list: sly\Console\Command\AddonsList
+    sly_addons_install: sly\Console\Command\AddonsInstall
+    sly_addons_activate: sly\Console\Command\AddonsActivate
+    sly_addons_uninstall: sly\Console\Command\AddonsUninstall
+    sly_addons_deactivate: sly\Console\Command\AddonsDeactivate
