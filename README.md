@@ -17,7 +17,7 @@ The console is not yet part of the standard distribution for SallyCMS projects, 
     :::json
     {
         "require": {
-            "sallycms/console": "0.8.*@dev"
+            "sallycms/console": "0.9.*@dev"
         }
     }
 
@@ -37,7 +37,7 @@ Calling the console with no further arguments lists all available commands and g
 
     :::text
     $ sally/console/bin/console
-    Sally Console version 0.8.0
+    Sally Console version 0.9.0
 
     Usage:
       [options] command [arguments]
@@ -90,7 +90,7 @@ The major difference here is the command class's constructor, which does not onl
 
     :::php
     <?php
-    
+
     class MyCommand extends sly\Console\Command\Base {
        protected function configure() {
           $this
