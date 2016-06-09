@@ -90,9 +90,9 @@ class ErrorHandler extends sly_ErrorHandler_Base implements sly_ErrorHandler {
 	 * log the exception and stop the script execution by displaying a neutral
 	 * error page.
 	 *
-	 * @param Exception $exception
+	 * @param $exception
 	 */
-	public function handleException(Exception $exception) {
+	public function handleException($exception) {
 		$this->console->renderException($exception, $this->output);
 		exit(1);
 	}
