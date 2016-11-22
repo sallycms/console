@@ -92,7 +92,7 @@ class ErrorHandler extends sly_ErrorHandler_Base implements sly_ErrorHandler {
 	 *
 	 * @param Exception $exception
 	 */
-	public function handleException(Exception $exception) {
+	public function handleException($exception) {
 		$this->console->renderException($exception, $this->output);
 		exit(1);
 	}
