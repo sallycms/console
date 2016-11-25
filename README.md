@@ -1,7 +1,7 @@
 SallyCMS Console
 ================
 
-This package provides a command line application to manage a SallyCMS project. It's capable of performing tasks like clearing the cache and perform commands provided by addOns, which makes it a powerful extension to SallyCMS. Technically it's based on the Symfony Console Component and therefore requires *PHP 5.3+* to run, but this does not change the fact that Sally itself needs PHP 5.2.
+This package provides a command line application to manage a SallyCMS project. It's capable of performing tasks like clearing the cache and perform commands provided by addOns, which makes it a powerful extension to SallyCMS. Technically it's based on the Symfony Console Component.
 
 Requirements
 ------------
